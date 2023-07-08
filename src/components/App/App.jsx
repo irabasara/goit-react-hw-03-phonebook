@@ -12,6 +12,22 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem(
+        LS_KEY_CONTACTS,
+        JSON.stringify(this.state.contacts)
+      );
+    }
+  }
+
+  componentDidMount() {
+    const contacts = JSON.parse(localStorage.getItem(LS_KEY_CONTACTS));
+    if (contacts) {
+      this.setState({ contacts });
+    }
+  }
+
   onContactFormSubmit = newContact => {
     const { contacts } = this.state;
 
@@ -50,22 +66,6 @@ export class App extends Component {
       contact.name.toLowerCase().includes(normilizeFilter)
     );
   };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.contacts !== this.state.contacts) {
-      localStorage.setItem(
-        LS_KEY_CONTACTS,
-        JSON.stringify(this.state.contacts)
-      );
-    }
-  }
-
-  componentDidMount() {
-    const contacts = JSON.parse(localStorage.getItem(LS_KEY_CONTACTS));
-    if (contacts) {
-      this.setState({ contacts });
-    }
-  }
 
   render() {
     const filteredContact = this.getFilteredContact();
